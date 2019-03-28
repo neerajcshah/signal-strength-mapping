@@ -1,7 +1,6 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.interpolate import RegularGridInterpolator
 
 def f(x, y):
     return np.sin(4*np.pi*x) * np.cos(4*np.pi*y)
