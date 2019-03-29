@@ -14,53 +14,24 @@ def interpolate(xgrid, ygrid, xsamples, ysamples, fsamples):
     print('xsamples', xsamples.shape)
     print('fsamples', fsamples.shape)
 
-
+    dnm = np.zeros_like(xgrid)
     num = np.zeros_like(xgrid)
-    for i in range(len(xgrid)):
-        for j in range(len(ygrid)):
-            num = 0
-            dnm = 0
-            for k in range(len(fsamples)):
-                dist_squared = (xgrid[i][j] - xsamples[k])**2 + (ygrid[i][j] - ysamples[k])**2
-                weight = 10000 * math.exp(-dist_squared/(2.0*std_dev**2))
-                num += fsamples[k] * weight
-                dnm += weight
+    
+    xgrid = np.tile(xgrid, (len(fsamples),1,1))
+    ygrid = np.tile(ygrid, (len(fsamples),1,1))
+    
+    x_y_f = np.array([xsamples, ysamples, fsamples],dtype=np.float32)
+    weight = np.zeros((len(xgrid),len(ygrid), len(fsamples)))
+    
+    weight = 10000.*np.exp(-(np.square(xgrid.transpose() - x_y_f[0]).transpose() + np.square(ygrid.transpose() - x_y_f[1]).transpose())/(2.0*std_dev**2))
+    
+    ### now collapse weight into dnm
+    dnm = np.sum(weight, axis=0)
+    ### Build num from weight and sample f 
+    num = np.sum((weight.transpose() * x_y_f[2]).transpose(), axis=0)
+    
+    return np.where(dnm < 1e-20, 0, num/dnm) 
 
-            if dnm < 1e-20:
-                f_interp[i][j] = 0
-            else:
-                f_interp[i][j] = num/dnm
-
-    '''
-    for i in range(len(xgrid)):
-        for j in range(len(ygrid)):
-            num = 0
-            dnm = 0
-            for k in range(len(fsamples)):
-                dist_squared = (xgrid[i][j] - xsamples[k])**2 + (ygrid[i][j] - ysamples[k])**2
-                weight = 10000 * math.exp(-dist_squared/(2.0*std_dev**2))
-                num += fsamples[k] * weight
-                dnm += weight
-
-            if dnm < 1e-20:
-                f_interp[i][j] = 0
-            else:
-                f_interp[i][j] = num/dnm
-    '''
-
-    '''
-    for i in range(len(f_interp)):
-        for j in range(len(f_interp[i])):
-            if i == 0 and j == 0:
-                print('a.a'),
-            elif f_interp[i][j] > 0:
-                print('x.x'),
-            else:
-                print('%.1f' %(f_interp[i][j])),
-        print('')
-    '''
-
-    return f_interp
 
 
 def main():
@@ -75,7 +46,7 @@ def main():
     fwalk = f(xwalk, ywalk)
     
     fwalk_interp = interpolate(xgrid, ygrid, xwalk, ywalk, fwalk)
-
+    print(fwalk_interp)
     plt.subplot(1,2,1)
     plt.pcolormesh(xyrng, xyrng, fgrid)
     plt.plot(xwalk, ywalk, 'k.')
