@@ -1,0 +1,47 @@
+{
+    "JsonData": [
+        {
+            "Latitude": 39.90718833333334,
+            "Longitude": -75.35432999999999,
+            "wifi": [
+                {
+                    "DBM": "0.00",
+                    "SSID": "eduroam",
+                    "MAC": "c8:b5:ad:34:d1:10"
+                }
+                            ]
+        },
+        {
+        "Latitude": 39.90626,
+        "Longitude": -75.35432999999999,
+        "wifi": [
+            {
+                "DBM": "-70.00",
+                "SSID": "eduroam",
+                "MAC": "c8:b5:ad:34:d1:10"
+            }
+                        ]
+        },{
+            "Latitude": 39.90718833333334,
+            "Longitude": -75.3530,
+            "wifi": [
+                {
+                    "DBM": "-100.00",
+                    "SSID": "eduroam",
+                    "MAC": "c8:b5:ad:34:d1:10"
+                }
+                            ]
+        },{
+            "Latitude": 39.90626,
+            "Longitude": -75.3530,
+            "wifi": [
+                {
+                    "DBM": "50.00",
+                    "SSID": "eduroam",
+                    "MAC": "c8:b5:ad:34:d1:10"
+                }
+                            ]
+        }
+        ]
+}
+ 
